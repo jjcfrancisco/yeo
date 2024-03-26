@@ -104,3 +104,4 @@ func prepareDb(database string) error {
 	return nil
 
 }
+

@@ -23,14 +23,6 @@ func init() {
     }()
 }
 
-func cleanup() {
-	filename := os.Getenv("FILENAME")
-	if err := os.Remove(filename); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-}
-
 func main() {
 	app := &cli.App{
 		Name:  "Yeo",

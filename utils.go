@@ -17,7 +17,7 @@ func openConfigs(dbName string) (*database, error) {
 
 	raw, err := os.ReadFile("./databases.json")
 	if err != nil {
-		raw, err = os.ReadFile(homeDir+"/databases.json")
+		raw, err = os.ReadFile(homeDir + "/databases.json")
 		if err != nil {
 			fmt.Println("databases.json file is not present")
 			os.Exit(1)
@@ -62,4 +62,12 @@ func validateTargetDb(targetDb string) error {
 	}
 
 	return nil
+}
+
+func cleanup() {
+	filename := os.Getenv("FILENAME")
+	if err := os.Remove(filename); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
