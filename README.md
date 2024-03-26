@@ -1,5 +1,5 @@
-# yeo
-`yeo` is a tiny backup utility for PostgreSQL databases.
+# Yeo!
+Yeo! is a tiny backup utility for PostgreSQL databases.
 
 ## Features
 
