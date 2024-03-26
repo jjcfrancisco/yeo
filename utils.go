@@ -50,11 +50,15 @@ func validateFilename(fn string) error {
 	return nil
 }
 
-func validateTargetDb(targetDb string) error {
+func validateTargetDb(targetDb string, unlock bool) error {
 
 	configs, err := openConfigs(targetDb)
 	if err != nil {
 		return err
+	}
+
+	if unlock {
+		return nil
 	}
 
 	if !strings.Contains(configs.Host, "localhost") {
