@@ -10,7 +10,7 @@ Yeo! is a tiny backup utility for PostgreSQL databases.
 
 ## Installation
 To install `yeo`:
-1. It is **essential** to install **libpq** in your system:
+1. It is **essential** to have Postgres utilities such as `pg_dump`, `pg_restore`, `createdb` or `dropdb` in your system. This are included in *libpq* for MacOS or the entire PostgreSQL suite for Windows:
 ```bash
 # Homebrew (MacOS & Linux)
 brew install libpq # Make sure libpq is in your PATH
@@ -62,21 +62,23 @@ To back up a database:
 ```bash
 # 'local' is the name set in the databases.json and can be personalised
 
-yeo backup local local_backup.dump
+yeo backup local db_backup.dump
 ```
 
 To revive a database from a backup file:
 ```bash
-# 'development' is the name set in the database.json and can be personalised
+# 'local' or 'prod' are names set in the database.json and can be personalised. The '--allow' flag allows to revive into non-local databases. 
 
-yeo revive development local_backup.dump
+yeo revive local db_backup.dump
+yeo revive --allow prod db_backup.dump
 ```
 
 To clone a database (backup + revive):
 ```bash
-# clones the 'development' database into the 'local' database as set in the database.json
+# 'local1', 'local2' or 'prod' are names set in the database.json and can be personalised. The '--allow' flag allows to revive into non-local databases.
 
-yeo clone development local
+yeo clone local1 local2
+yeo clone --allow local1 prod
 ```
 
 ## Future improvements
