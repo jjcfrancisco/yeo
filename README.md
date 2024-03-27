@@ -9,29 +9,24 @@ Yeo! is a tiny backup utility for PostgreSQL databases.
 * Clone a database using the `clone` command - a combination of dump and restore in the Postgres terminology.
 
 ## Installation
+> **Yeo! is currently only available for MacOS users via brew.**
+
+
 To install `yeo`:
-1. It is **essential** to have Postgres utilities such as `pg_dump`, `pg_restore`, `createdb` or `dropdb` in your system. This are included in *libpq* for MacOS or the entire PostgreSQL suite for Windows:
+
 ```bash
-# Homebrew (MacOS & Linux)
+# Installing libpq is essential
 brew install libpq # Make sure libpq is in your PATH
-
-# Chocolatey (Windows)
-choco install postgresql # Easiest is to install postgres
-```
-2. Then install `yeo`:
-```bash
-go get github.com/jjcfrancisco/yeo
+brew tap jjcfrancisco/yeo # Adds the Github repository as a tap
+brew install yeo
 ```
 
-Alternatively, you can use the already-built binaries for MacOS & Windows [here](https://github.com/jjcfrancisco/yeo/releases/). Just bear in mind that when running the binary, you must be in the same directory as where the binary lives (and create a `databases.json`) and call it like this -> `./yeo [command]...`
-
-For instance:
-```bash
-./yeo clone development local
-``` 
+Alternatively, you can use the already-built binaries for MacOS [here](https://github.com/jjcfrancisco/yeo/releases/).
 
 ## Requirements
 The only thing you need after the installation process is a `databases.json` file with credentials of databases. It must be populated with credentials of at least one database.
+
+**IMPORTANT**: Yeo! will look for the `databases.json` in your user's home directory e.g. `/Users/joebloggs/databases.json`.
 
 The `databases.json` must follow this JSON structure:
 ```json

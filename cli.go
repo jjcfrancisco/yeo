@@ -35,7 +35,7 @@ func main() {
 	// Main CLI
 	app := &cli.App{
 		Name:    "Yeo!",
-		Version: "v0.2.0",
+		Version: "v0.4.6",
 		Usage:   "Backup utilities for PostgreSQL databases",
 		Commands: []*cli.Command{
 			{
