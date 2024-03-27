@@ -19,6 +19,7 @@ builds:
   - env:
       - CGO_ENABLED=0
     goos:
+      - linux
       - darwin
 
 archives:
@@ -48,9 +49,6 @@ brews:
       owner: jjcfrancisco
       name: yeo
     folder: Formula
-    dependencies:
-      - name: libpq
-        os: mac
     homepage: "https://github.com/jjcfrancisco/yeo"
     description: "Yeo! is a tiny backup utility for PostgreSQL databases."
     license: "Apache License 2.0"
