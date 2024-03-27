@@ -47,7 +47,7 @@ changelog:
 brews:
   - repository:
       owner: jjcfrancisco
-      name: yeo-tap
+      name: yeo
     folder: Formula
     homepage: "https://github.com/jjcfrancisco/yeo"
     description: "Yeo! is a tiny backup utility for PostgreSQL databases."
