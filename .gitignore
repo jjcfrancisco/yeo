@@ -22,5 +22,6 @@ go.work
 
 # Yeo
 databases.json
+*.dump
 
 dist/

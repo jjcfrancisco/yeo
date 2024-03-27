@@ -45,23 +45,40 @@ func main() {
 				Action: func(cCtx *cli.Context) error {
 					database := cCtx.Args().Get(0)
 					filename := cCtx.Args().Get(1)
+
+					// Validates input
+					if err := validateBackupArgs(cCtx.Args().Slice(), database); err != nil {
+						fmt.Println(err)
+						os.Exit(1)
+					}
+
+					// Validates that there's a connection with database
+					if err := checkDbCons(database); err != nil {
+						fmt.Println(err)
+						os.Exit(1)
+					}
+
 					os.Setenv("FILENAME", filename)
+					// Checks '.dump' filename provided is valid
 					if err := validateFilename(filename); err != nil {
 						fmt.Println(err)
 						os.Exit(1)
 					}
-					err := backup(database, filename, false)
-					if err != nil {
+
+					// Backs up a database
+					if err := backup(database, filename, false); err != nil {
 						fmt.Println(err)
 						os.Exit(1)
 					}
+
 					return nil
+
 				},
 			},
 			{
 				Name:      "revive",
 				Usage:     "revives a database from a backup. This is also known as 'restore'.",
-				UsageText: "yeo revive [options] [database] [filename]\n\nExample 1: yeo revive local_db db_backup.dump\n\nExample 2: yeo revive --allow prod db_backup.dump",
+				UsageText: "yeo revive [options] [dump filename] [database]\n\nExample 1: yeo revive db_backup.dump local_db\n\nExample 2: yeo revive --allow db_backup.dump prod",
 				Flags: []cli.Flag{
 					&cli.BoolFlag{
 						Name:  "allow",
@@ -69,37 +86,54 @@ func main() {
 					},
 				},
 				Action: func(cCtx *cli.Context) error {
-					database := cCtx.Args().Get(0)
-					filename := cCtx.Args().Get(1)
+					filename := cCtx.Args().Get(0)
+					database := cCtx.Args().Get(1)
+
+					// Validates input
+					if err := validateReviveArgs(cCtx.Args().Slice(), database); err != nil {
+						fmt.Println(err)
+						os.Exit(1)
+					}
 
 					// Checks '.dump' filename provided is valid
 					if err := validateFilename(filename); err != nil {
 						fmt.Println(err)
 						os.Exit(1)
 					}
-					// Checks the target database is allowed
-					isUnlocked := cCtx.Bool("allow")
-					if err := validateTargetDb(database, isUnlocked); err != nil {
+
+					// Validates that there's a connection with database
+					if err := checkDbCons(database); err != nil {
 						fmt.Println(err)
 						os.Exit(1)
 					}
+
+					// Checks the target database is allowed
+					isUnlocked := cCtx.Bool("allow")
+					if err := validateTargetDb(filename, database, "revive", isUnlocked); err != nil {
+						fmt.Println(err)
+						os.Exit(1)
+					}
+
 					// Prepares database by dropping and creating a new database
 					if err := prepareDb(database); err != nil {
 						fmt.Println(err)
 						os.Exit(1)
 					}
+
 					// Restores a database
 					if err := revive(database, filename, false); err != nil {
 						fmt.Println(err)
 						os.Exit(1)
 					}
+
 					return nil
+
 				},
 			},
 			{
 				Name:      "clone",
 				Usage:     "clones a database into another database. This is also known as 'dump' and 'restore'.",
-				UsageText: "yeo clone [options] [database] [filename]\n\nExample 1: yeo clone prod local_db\n\nExample 2: yeo clone --allow local_db prod",
+				UsageText: "yeo clone [options] [origin database] [target database]\n\nExample 1: yeo clone prod local_db\n\nExample 2: yeo clone --allow local_db prod",
 				Flags: []cli.Flag{
 					&cli.BoolFlag{
 						Name:  "allow",
@@ -115,16 +149,24 @@ func main() {
 					// User args
 					og_database := cCtx.Args().Get(0)
 					target_database := cCtx.Args().Get(1)
-					isUnlocked := cCtx.Bool("allow")
 
-					// Checks the target database is allowed
-					if err := validateTargetDb(target_database, isUnlocked); err != nil {
+					// Validates input
+					if err := validateCloneArgs(cCtx.Args().Slice(), og_database, target_database); err != nil {
 						fmt.Println(err)
 						os.Exit(1)
 					}
+
+					isUnlocked := cCtx.Bool("allow")
+
+					// Checks the target database is allowed
+					if err := validateTargetDb(og_database, target_database, "clone", isUnlocked); err != nil {
+						fmt.Println(err)
+						os.Exit(1)
+					}
+
 					fmt.Println() // Used for padding
 					// Spin wheel
-					w := wow.New(os.Stdout, spin.Get(spin.Dots), fmt.Sprintf(" Cloning %s database", og_database))
+					w := wow.New(os.Stdout, spin.Get(spin.Dots), fmt.Sprintf(" Cloning '%s' database", og_database))
 					w.Start()
 
 					// Dumps a database
@@ -133,6 +175,7 @@ func main() {
 						fmt.Println(err)
 						os.Exit(1)
 					}
+
 					// Prepares database by dropping and creating a new database
 					if err := prepareDb(target_database); err != nil {
 						fmt.Println(err)
@@ -140,10 +183,11 @@ func main() {
 					}
 
 					// Restores a database
-					if err = revive(target_database, temp_filename, false); err != nil {
+					if err = revive(target_database, temp_filename, true); err != nil {
 						fmt.Println(err)
 						os.Exit(1)
 					}
+
 					// Removes the 'temp.dump' file generated during the process
 					cleanup()
 

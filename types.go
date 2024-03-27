@@ -6,6 +6,7 @@ type databases struct {
 
 type database struct {
 	Name     string `json:"name"`
+	IsLocal  bool   `json:"isLocal"`
 	Database string `json:"database"`
 	Port     string `json:"port"`
 	Host     string `json:"host"`

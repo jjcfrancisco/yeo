@@ -39,6 +39,7 @@ The `databases.json` must follow this JSON structure:
     "databases": [
         {
             "name": "local",
+            "isLocal": true,
             "database": "my_local_db",
             "port": "5432",
             "host": "localhost",
@@ -47,6 +48,7 @@ The `databases.json` must follow this JSON structure:
         },
         {
             "name": "development",
+            "isLocal": false,
             "database": "dev",
             "port": "5432",
             "host": "yeo.host.com",
