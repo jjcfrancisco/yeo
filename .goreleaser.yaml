@@ -46,7 +46,7 @@ changelog:
 brews:
   - repository:
       owner: jjcfrancisco
-      name: yeo
+      name: homebrew-yeo
     folder: Formula
     dependencies:
       - name: libpq
