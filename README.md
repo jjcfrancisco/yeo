@@ -66,8 +66,8 @@ To revive a database from a backup file:
 ```bash
 # 'local' or 'prod' are names set in the database.json and can be personalised. The '--allow' flag allows to revive into non-local databases. 
 
-yeo revive local db_backup.dump
-yeo revive --allow prod db_backup.dump
+yeo revive db_backup.dump local
+yeo revive --allow db_backup.dump prod
 ```
 
 To clone a database (backup + revive):
