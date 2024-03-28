@@ -130,7 +130,7 @@ func validateCloneArgs(args []string, originDb string, targetDb string) error {
 
 func cleanup() {
 	filename := os.Getenv("FILENAME")
-	if err := os.Remove(filename); err != nil {
+	if err := os.Remove("./"+filename); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
