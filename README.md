@@ -1,5 +1,9 @@
 # Yeo!
-Yeo! is a tiny backup utility for PostgreSQL databases.
+Yeo! is a tiny backup utility for PostgreSQL databases. The intention with Yeo! is not to substitute utilities such as `pg_dump` or `pg_restore` but to speed up trivial Postgres operations related to backing up and restoring databases.
+
+<br>
+
+<img src="examples/clone-demo.gif" width="350"/>
 
 ## Features
 
@@ -9,7 +13,7 @@ Yeo! is a tiny backup utility for PostgreSQL databases.
 * Clone a database using the `clone` command - a combination of dump and restore in the Postgres terminology.
 
 ## Installation
-> **Yeo! is currently only available for MacOS users via brew.**
+> **Yeo! is currently only available for MacOS and Linux users via [Homebrew](https://brew.sh/)**
 
 
 To install `yeo`:

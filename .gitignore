@@ -23,5 +23,6 @@ go.work
 # Yeo
 databases.json
 *.dump
+.DS_Store
 
 dist/
