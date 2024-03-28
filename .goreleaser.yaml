@@ -51,6 +51,8 @@ brews:
     dependencies:
       - name: libpq
         os: mac
+      - name: libpq
+        os: linux
     homepage: "https://github.com/jjcfrancisco/yeo"
     description: "Yeo! is a tiny backup utility for PostgreSQL databases."
     license: "Apache License 2.0"
