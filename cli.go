@@ -2,10 +2,7 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/gernest/wow"
 	"github.com/gernest/wow/spin"
@@ -13,18 +10,8 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// Cleans up a database if user ctrl+c
-func init() {
-	c := make(chan os.Signal)
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	go func() {
-		<-c
-		cleanup()
-		os.Exit(1)
-	}()
-}
+func startCli() *cli.App {
 
-func main() {
 	// Version Flag
 	cli.VersionFlag = &cli.BoolFlag{
 		Name:    "version",
@@ -197,10 +184,6 @@ func main() {
 		},
 	}
 
-	// Allows suggestions if mispellings
-	app.Suggest = true
+	return app
 
-	if err := app.Run(os.Args); err != nil {
-		log.Fatal(err)
-	}
 }

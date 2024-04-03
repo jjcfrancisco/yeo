@@ -1,44 +1,17 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 )
 
-func openConfigs(dbName string) (*database, error) {
-
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		log.Fatal(err)
+func cleanup() {
+	filename := os.Getenv("FILENAME")
+	if err := os.Remove("./" + filename); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
-
-	raw, err := os.ReadFile("./databases.json")
-	if err != nil {
-		raw, err = os.ReadFile(homeDir + "/databases.json")
-		if err != nil {
-			fmt.Println("databases.json file is not present")
-			os.Exit(1)
-		}
-	}
-
-	var dbs databases
-
-	err = json.Unmarshal([]byte(raw), &dbs)
-	if err != nil {
-		log.Fatalf("There's an issue with the databases.json file %s", err)
-	}
-
-	for _, db := range dbs.Dbs {
-		if db.Name == dbName {
-			return &db, nil
-		}
-	}
-
-	return nil, fmt.Errorf("Could not find such database")
-
 }
 
 func validateFilename(fn string) error {
@@ -56,7 +29,7 @@ func validateBackupArgs(args []string, database string) error {
 		return fmt.Errorf("\nError: You must pass valid arguments.\n\nExample: yeo backup prod prod.dump\n")
 	} else if len(args) > 2 {
 		return fmt.Errorf("\nToo many arguments passed.\n\nExample: yeo backup prod prod.dump")
-	} 
+	}
 
 	_, err := openConfigs(database)
 	if err != nil {
@@ -73,7 +46,7 @@ func validateReviveArgs(args []string, database string) error {
 		return fmt.Errorf("\nError: You must pass valid arguments.\n\nExample: yeo revive development.dump prod\n")
 	} else if len(args) > 2 {
 		return fmt.Errorf("\nToo many arguments passed.\n\nExample: yeo revive development.dump prod")
-	} 
+	}
 
 	_, err := openConfigs(database)
 	if err != nil {
@@ -106,14 +79,13 @@ func validateTargetDb(origin string, targetDb string, op string, unlock bool) er
 	return nil
 }
 
-
 func validateCloneArgs(args []string, originDb string, targetDb string) error {
 
 	if len(args) <= 1 {
 		return fmt.Errorf("\nError: You must pass valid arguments.\n\nExample: yeo clone development prod\n")
 	} else if len(args) > 2 {
 		return fmt.Errorf("\nToo many arguments passed.\n\nExample: yeo clone development prod")
-	} 
+	}
 
 	_, err := openConfigs(originDb)
 	if err != nil {
@@ -126,12 +98,4 @@ func validateCloneArgs(args []string, originDb string, targetDb string) error {
 
 	return nil
 
-}
-
-func cleanup() {
-	filename := os.Getenv("FILENAME")
-	if err := os.Remove("./"+filename); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
 }
