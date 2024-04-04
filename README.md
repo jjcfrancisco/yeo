@@ -86,8 +86,6 @@ yeo clone --allow local1 prod
 * Validation for `databases.json` against schema.
 * It should not be 'isLocal' but 'lock' for consistency reasons.
 
-```
-
 ## License
 
 See [`LICENSE`](./LICENSE)
